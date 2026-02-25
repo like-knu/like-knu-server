@@ -8,13 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -22,7 +18,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -74,26 +69,19 @@ public class CafeteriaMenuCollector implements MenuCollector {
     }
 
     private String generateUrl(Cafeteria cafeteria) {
-        return menuProperties.getCafeteriaPrefix() + cafeteria.getId() + menuProperties.getCafeteriaSuffix();
+        return UriComponentsBuilder.fromUriString(menuProperties.getCafeteriaUrl())
+                .buildAndExpand(cafeteria.getNumber())
+                .toUriString();
     }
 
     private String generateNextWeekUrl(Cafeteria cafeteria) {
         LocalDate previousMonday = DateTimeUtils.getPreviousOrSameDate(DayOfWeek.MONDAY);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("layout", "39BkRFnlItbhEGJ5CfPOEflabU8u4tWWDbOYcFOF2Xw%3D");
-        formData.add("monday", formatter.format(previousMonday));
-        formData.add("week", "next");
-
-        ResponseEntity<String> response = restClient.post()
-                .uri("https://www.kongju.ac.kr/diet/KNU/" + cafeteria.getNumber() + "/view.do")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(formData)
-                .retrieve()
-                .toEntity(String.class);
-        HttpHeaders responseHeaders = response.getHeaders();
-        return Objects.requireNonNull(responseHeaders.getLocation())
-                .toString();
+        return UriComponentsBuilder.fromUriString(menuProperties.getCafeteriaUrl())
+                .queryParam("monday", formatter.format(previousMonday))
+                .queryParam("week", "next")
+                .buildAndExpand(cafeteria.getNumber())
+                .toUriString();
     }
 }
