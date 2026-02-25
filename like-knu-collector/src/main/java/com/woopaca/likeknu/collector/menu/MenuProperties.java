@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "web")
 public class MenuProperties {
 
-    private String cafeteriaPrefix;
-    private String cafeteriaSuffix;
+    private String cafeteriaUrl;
     private String dormitoryCafeteriaPrefix;
 }
