@@ -1,4 +1,4 @@
-rootProject.name = 'LikeKNU'
+rootProject.name = 'like-knu'
 
 include 'like-knu-api'
 include 'like-knu-job'
