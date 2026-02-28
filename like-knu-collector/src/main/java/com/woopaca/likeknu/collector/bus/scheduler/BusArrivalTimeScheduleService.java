@@ -4,6 +4,7 @@ import com.woopaca.likeknu.collector.bus.BusArrivalTimeRequestManager;
 import com.woopaca.likeknu.collector.bus.DepartureStop;
 import com.woopaca.likeknu.collector.bus.MapType;
 import com.woopaca.likeknu.collector.bus.dto.BusArrivalTime;
+import com.woopaca.likeknu.collector.bus.dto.BusArrivalTimes;
 import com.woopaca.likeknu.collector.bus.dto.KakaoRealtimeBusInformation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -34,7 +35,7 @@ public class BusArrivalTimeScheduleService {
         List<BusArrivalTime> busArrivalTimes = Arrays.stream(DepartureStop.values())
                 .flatMap(this::fetchBusArrivalTimes)
                 .toList();
-        applicationEventPublisher.publishEvent(busArrivalTimes);
+        applicationEventPublisher.publishEvent(new BusArrivalTimes(busArrivalTimes));
     }
 
     private Stream<BusArrivalTime> fetchBusArrivalTimes(DepartureStop departureStop) {
