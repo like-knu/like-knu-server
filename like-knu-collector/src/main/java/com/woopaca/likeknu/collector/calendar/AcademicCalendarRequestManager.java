@@ -1,11 +1,11 @@
 package com.woopaca.likeknu.collector.calendar;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Slf4j
 @Component
@@ -20,16 +20,14 @@ public class AcademicCalendarRequestManager {
     }
 
     public String fetchAcademicCalendarPage(int year, int month) {
-        String uri = webProperties.getAcademicCalendar();
+        URI uri = UriComponentsBuilder.fromUriString(webProperties.getAcademicCalendar())
+                .queryParam("year", year)
+                .queryParam("month", month)
+                .build()
+                .toUri();
 
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("year", String.valueOf(year));
-        formData.add("month", String.valueOf(month));
-
-        String responseBody = webClient.post()
+        String responseBody = webClient.get()
                 .uri(uri)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue(formData)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
