@@ -1,3 +1,3 @@
 [submodule "like-knu-api/src/main/resources/secrets"]
 	path = like-knu-api/src/main/resources/secrets
-	url = https://github.com/LikeKNU/LikeKNU-secrets.git
+	url = https://github.com/like-knu/like-knu-secrets.git
