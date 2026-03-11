@@ -10,6 +10,17 @@
     <include resource="logging/file-appender.xml" />
     <include resource="logging/json-file-appender.xml" />
 
+    <springProfile name="prod">
+        <springProperty scope="local" name="SLACK_WEBHOOK" source="slack.error-webhook" />
+        <appender name="SLACK-ERROR" class="com.woopaca.likeknu.logging.SlackErrorAppender">
+            <webhookUrl>${SLACK_WEBHOOK}</webhookUrl>
+            <excludePatterns>IOException: Broken pipe|Failed to fetch Naver real-time bus information.</excludePatterns>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>ERROR</level>
+            </filter>
+        </appender>
+    </springProfile>
+
     <springProfile name="local,local-dev,test">
         <root level="INFO">
             <appender-ref ref="CONSOLE" />
@@ -22,8 +33,11 @@
         </root>
     </springProfile>
 
-    <root level="INFO">
-        <appender-ref ref="JSON-FILE" />
-        <appender-ref ref="FILE" />
-    </root>
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="JSON-FILE" />
+            <appender-ref ref="FILE" />
+            <appender-ref ref="SLACK-ERROR" />
+        </root>
+    </springProfile>
 </configuration>

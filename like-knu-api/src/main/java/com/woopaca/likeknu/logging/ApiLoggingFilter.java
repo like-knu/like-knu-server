@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ApiLoggingFilter extends OncePerRequestFilter {
 
