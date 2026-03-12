@@ -2,7 +2,4 @@ dependencies {
     implementation project(':like-knu-collector')
     implementation project(':like-knu-data')
     implementation project(':like-knu-common')
-
-    implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
-    implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 }

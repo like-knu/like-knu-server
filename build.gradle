@@ -10,12 +10,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven { url 'https://repo.spring.io/milestone' }
-        maven { url 'https://repo.spring.io/snapshot' }
-        maven {
-            name = 'Central Portal Snapshots'
-            url = 'https://central.sonatype.com/repository/maven-snapshots/'
-        }
     }
 }
 
@@ -37,12 +31,6 @@ subprojects {
     bootJar.enabled = false
     jar.enabled = true
 
-    dependencyManagement {
-        imports {
-            mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.16.0")
-        }
-    }
-
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -54,19 +42,15 @@ subprojects {
         implementation 'com.github.seratch:jslack:3.4.2'
         implementation 'org.jsoup:jsoup:1.16.1'
         implementation 'net.logstash.logback:logstash-logback-encoder:8.0'
-        implementation 'io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter'
         implementation 'org.apache.httpcomponents.client5:httpclient5'
         compileOnly 'org.projectlombok:lombok'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         testCompileOnly 'org.projectlombok:lombok'
         runtimeOnly 'com.h2database:h2'
         runtimeOnly 'com.mysql:mysql-connector-j'
-        runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
         annotationProcessor 'org.projectlombok:lombok'
         testAnnotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.springframework.security:spring-security-test'
-        testImplementation 'org.springframework.amqp:spring-rabbit-test'
-        testImplementation 'io.projectreactor:reactor-test'
     }
 }
