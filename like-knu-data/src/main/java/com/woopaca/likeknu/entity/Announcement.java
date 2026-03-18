@@ -28,6 +28,9 @@ public class Announcement extends BaseEntity {
     @Column(name = "announcement_url", nullable = false)
     private String announcementUrl;
 
+    @Column(name = "simple_url")
+    private String simpleUrl;
+
     @Column(name = "announcement_date", nullable = false)
     private LocalDate announcementDate;
 
@@ -52,10 +55,11 @@ public class Announcement extends BaseEntity {
     }
 
     @Builder
-    public Announcement(String announcementTitle, String announcementUrl, LocalDate announcementDate, Campus campus, Category category, Tag tag) {
+    public Announcement(String announcementTitle, String announcementUrl, String simpleUrl, LocalDate announcementDate, Campus campus, Category category, Tag tag) {
         this();
         this.announcementTitle = announcementTitle;
         this.announcementUrl = announcementUrl;
+        this.simpleUrl = simpleUrl;
         this.announcementDate = announcementDate;
         this.campus = campus;
         this.category = category;

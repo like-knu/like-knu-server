@@ -19,12 +19,18 @@ public class AnnouncementMessage {
 
     @NotBlank
     private String title;
+
     @NotBlank
     private String announcementUrl;
+
+    private String simpleUrl;
+
     @NotNull
     private LocalDate announcementDate;
+
     @NotNull
     private Campus campus;
+
     @NotNull
     private Category category;
 
@@ -32,9 +38,10 @@ public class AnnouncementMessage {
     }
 
     @Builder
-    public AnnouncementMessage(String title, String announcementUrl, LocalDate announcementDate, Campus campus, Category category) {
+    public AnnouncementMessage(String title, String announcementUrl, String simpleUrl, LocalDate announcementDate, Campus campus, Category category) {
         this.title = title;
         this.announcementUrl = announcementUrl;
+        this.simpleUrl = simpleUrl;
         this.announcementDate = announcementDate;
         this.campus = campus;
         this.category = category;
@@ -44,6 +51,7 @@ public class AnnouncementMessage {
         return AnnouncementMessage.builder()
                 .title(announcement.getAnnouncementTitle())
                 .announcementUrl(announcement.getAnnouncementUrl())
+                .simpleUrl(announcement.getAnnouncementUrl())
                 .announcementDate(announcement.getAnnouncementDate())
                 .campus(announcement.getCampus())
                 .category(announcement.getCategory())
@@ -54,6 +62,7 @@ public class AnnouncementMessage {
         return Announcement.builder()
                 .announcementTitle(title)
                 .announcementUrl(announcementUrl)
+                .simpleUrl(simpleUrl)
                 .announcementDate(announcementDate)
                 .campus(campus)
                 .category(category)

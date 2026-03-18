@@ -25,6 +25,7 @@ public class AnnouncementConsumer {
                 .map(announcement -> AnnouncementMessage.builder()
                         .title(announcement.title())
                         .announcementUrl(announcement.announcementUrl())
+                        .simpleUrl(announcement.simpleUrl())
                         .announcementDate(announcement.announcementDate())
                         .campus(Campus.valueOf(announcement.campus().name()))
                         .category(announcement.category())

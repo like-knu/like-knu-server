@@ -33,15 +33,14 @@ public class StudentNewsAnnouncementParser {
                     String campusText = row.select("span.cate").text();
 
                     String title = row.select("strong").text();
-                    String url = studentNewsURLExtractor.extractRedirectURL(
-                            announcementProperties.getKongjuUniversityUrl() + baseHref
-                    );
+                    String originalUrl = announcementProperties.getKongjuUniversityUrl() + baseHref;
+                    String url = studentNewsURLExtractor.extractRedirectURL(originalUrl);
                     LocalDate date = LocalDate.parse(dateText, DateTimeFormatter.ofPattern("yyyy.MM.dd"));
                     Campus campus = Arrays.stream(Campus.values())
                             .filter(it -> campusText.contains(it.getCampusLocation()))
                             .findAny()
                             .orElse(Campus.ALL);
-                    return Announcement.ofStudentNews(title, url, date, campus);
+                    return Announcement.ofStudentNews(title, url, originalUrl, date, campus);
                 })
                 .toList();
     }
