@@ -2,6 +2,7 @@ package com.woopaca.likeknu.controller;
 
 import com.woopaca.likeknu.Campus;
 import com.woopaca.likeknu.controller.dto.announcement.MainAnnouncementsResponse;
+import com.woopaca.likeknu.controller.dto.banner.HomeBannerResponse;
 import com.woopaca.likeknu.controller.dto.base.ResponseDto;
 import com.woopaca.likeknu.controller.dto.citybus.MainCityBusResponse;
 import com.woopaca.likeknu.controller.dto.menu.MainMenuResponse;
@@ -79,5 +80,11 @@ public class MainController {
     public ResponseDto<String> mainHeaderMessage() {
         MainHeaderMessage lastRegisteredMessage = mainHeaderMessageRepository.findFirstByOrderByRegisteredAtDesc();
         return ResponseDto.of(lastRegisteredMessage.getMessage());
+    }
+
+    @GetMapping("/banners")
+    public ResponseDto<List<HomeBannerResponse>> getHomeBanners() {
+        List<HomeBannerResponse> responses = mainService.getActiveHomeBanners();
+        return ResponseDto.of(responses);
     }
 }
