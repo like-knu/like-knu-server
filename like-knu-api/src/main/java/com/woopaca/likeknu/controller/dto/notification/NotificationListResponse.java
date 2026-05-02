@@ -1,46 +1,42 @@
 package com.woopaca.likeknu.controller.dto.notification;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.woopaca.likeknu.NotificationType;
+import com.woopaca.likeknu.entity.DeviceNotification;
 import com.woopaca.likeknu.entity.Notification;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Getter
-public class NotificationListResponse {
-
-    private final String notificationId;
-    private final String notificationTitle;
-    private final String notificationBody;
-    private final String notificationDate;
-    private final String notificationUrl;
-    @JsonProperty(value = "read")
-    private final boolean isRead;
+public record NotificationListResponse(String notificationId, NotificationType type, String notificationTitle,
+                                       String notificationBody, String notificationDate, String notificationUrl,
+                                       boolean read) {
 
     @Builder
-    public NotificationListResponse(String notificationId, String notificationTitle, String notificationBody, String notificationDate, String notificationUrl, boolean isRead) {
+    public NotificationListResponse(String notificationId, NotificationType type, String notificationTitle, String notificationBody, String notificationDate, String notificationUrl, boolean read) {
         this.notificationId = notificationId;
+        this.type = type;
         this.notificationTitle = notificationTitle;
         this.notificationBody = notificationBody;
         this.notificationDate = notificationDate;
         this.notificationUrl = notificationUrl;
-        this.isRead = isRead;
+        this.read = read;
     }
 
-    public static NotificationListResponse of(Notification notification) {
+    public static NotificationListResponse of(DeviceNotification deviceNotification) {
+        Notification notification = deviceNotification.getNotification();
         LocalDateTime date = notification.getNotificationDate();
         Duration duration = Duration.between(date, LocalDateTime.now());
         String notificationDate = getFormattedNotificationDate(duration, date);
         return NotificationListResponse.builder()
                 .notificationId(notification.getId())
+                .type(notification.getType())
                 .notificationTitle(notification.getNotificationTitle())
                 .notificationBody(notification.getNotificationBody())
                 .notificationDate(notificationDate)
                 .notificationUrl(notification.getNotificationUrl())
-                .isRead(notification.isRead())
+                .read(deviceNotification.isRead())
                 .build();
     }
 

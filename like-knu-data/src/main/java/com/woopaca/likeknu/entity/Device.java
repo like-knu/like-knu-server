@@ -65,12 +65,6 @@ public class Device {
     @ManyToMany
     private Set<Announcement> bookmarks = new HashSet<>();
 
-    @JoinTable(name = "device_notification",
-            joinColumns = @JoinColumn(name = "device_id"),
-            inverseJoinColumns = @JoinColumn(name = "notification_id"))
-    @ManyToMany
-    private List<Notification> notifications = new ArrayList<>();
-
     @Enumerated(value = EnumType.STRING)
     @CollectionTable(name = "subscribe", joinColumns = @JoinColumn(name = "device_id"))
     @Column(name = "tag")
@@ -98,6 +92,10 @@ public class Device {
 
     public void updateNotification(boolean isTurnOnNotification) {
         this.isTurnOnNotification = isTurnOnNotification;
+    }
+
+    public void updateExpoPushToken(String expoPushToken) {
+        this.expoPushToken = expoPushToken;
     }
 
     public void update(String platform, Campus campus, String themeColor, String favoriteCafeteria, String modelName,

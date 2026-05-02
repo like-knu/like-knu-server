@@ -1,18 +1,18 @@
 package com.woopaca.likeknu.entity;
 
+import com.woopaca.likeknu.Domain;
+import com.woopaca.likeknu.NotificationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Table(name = "notification")
@@ -21,6 +21,10 @@ public class Notification {
 
     @Id
     private String id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false, length = 40)
+    private NotificationType type;
 
     @Column(nullable = false)
     private String notificationTitle;
@@ -34,24 +38,28 @@ public class Notification {
     @Column(nullable = false)
     private String notificationUrl;
 
-    @Column(nullable = false)
-    private boolean read;
-
-    @JoinTable(name = "device_notification",
-            joinColumns = @JoinColumn(name = "notification_id"),
-            inverseJoinColumns = @JoinColumn(name = "device_id"))
-    @ManyToMany
-    private List<Device> devices = new ArrayList<>();
-
     protected Notification() {
     }
 
     @Builder
-    public Notification(String notificationTitle, String notificationBody, LocalDateTime notificationDate, String notificationUrl, Boolean read) {
+    public Notification(NotificationType type, String notificationTitle, String notificationBody,
+                        LocalDateTime notificationDate, String notificationUrl) {
+        this.id = String.join("", Domain.NOTIFICATION.toString().toLowerCase(), "_",
+                UUID.randomUUID().toString().replace("-", ""));
+        this.type = type;
         this.notificationTitle = notificationTitle;
         this.notificationBody = notificationBody;
         this.notificationDate = notificationDate;
         this.notificationUrl = notificationUrl;
-        this.read = read;
+    }
+
+    public static Notification create(NotificationType type, String title, String body, String url) {
+        return Notification.builder()
+                .type(type)
+                .notificationTitle(title)
+                .notificationBody(body)
+                .notificationDate(LocalDateTime.now())
+                .notificationUrl(url == null ? "" : url)
+                .build();
     }
 }

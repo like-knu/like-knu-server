@@ -2,7 +2,9 @@ package com.woopaca.likeknu.service;
 
 import com.woopaca.likeknu.Campus;
 import com.woopaca.likeknu.controller.dto.device.request.CampusModificationRequest;
+import com.woopaca.likeknu.controller.dto.device.request.ChangeNotificationRequest;
 import com.woopaca.likeknu.controller.dto.device.request.DeviceRegistrationRequest;
+import com.woopaca.likeknu.controller.dto.device.request.DeviceTokenRequest;
 import com.woopaca.likeknu.entity.Device;
 import com.woopaca.likeknu.exception.BusinessException;
 import com.woopaca.likeknu.repository.DeviceRepository;
@@ -43,39 +45,14 @@ public class DeviceService {
         }
     }
 
-    /*public void registerTokenByDevice(DeviceTokenRequest tokenRequest) {
+    public void registerTokenByDevice(DeviceTokenRequest tokenRequest) {
         String deviceId = tokenRequest.deviceId();
         Device device = deviceRepository.findById(deviceId)
-                .orElseThrow(() -> new BusinessException(String.format("deviceId: %s does not exist.", deviceId)));
-        device.setFcmToken(tokenRequest.token());
+                .orElseThrow(() -> new BusinessException(String.format("Device not found! [%s]", deviceId)));
+        device.updateExpoPushToken(tokenRequest.token());
     }
 
-    public List<SubscribeTagListResponse> getSubscribeTagList(String deviceId) {
-        Device device = deviceRepository.findById(deviceId)
-                .orElseThrow(() -> new BusinessException(String.format("Device not found! [%s]", deviceId)));
-        return device.getSubscribeTags().stream()
-                .map(SubscribeTagListResponse::of)
-                .toList();
-    }*/
-
-    /*public void updateSubscribeTagList(SubscribeTagsUpdateRequest subscribeTagsUpdateRequest) {
-        String deviceId = subscribeTagsUpdateRequest.deviceId();
-        List<TagName> tagNames = subscribeTagsUpdateRequest.tags();
-        List<Tag> tags = convertToTags(tagNames);
-        Device device = deviceRepository.findById(deviceId)
-                .orElseThrow(() -> new BusinessException(String.format("Device not found! [%s]", deviceId)));
-        device.updateSubscribesTags(tags);
-    }
-
-    private List<Tag> convertToTags(List<TagName> tagNames) {
-        return tagNames.stream()
-                .distinct()
-                .map(TagName::tag)
-                .map(Tag::of)
-                .toList();
-    }*/
-
-    /*@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public boolean isTurnOnPushNotifications(String deviceId) {
         Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new BusinessException(String.format("Device not found! [%s]", deviceId)));
@@ -88,5 +65,5 @@ public class DeviceService {
                 .orElseThrow(() -> new BusinessException(String.format("Device not found! [%s]", deviceId)));
 
         device.updateNotification(request.notification());
-    }*/
+    }
 }
