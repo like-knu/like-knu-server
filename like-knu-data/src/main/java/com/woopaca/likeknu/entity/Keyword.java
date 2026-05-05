@@ -20,6 +20,9 @@ import java.time.LocalDateTime;
 @Entity
 public class Keyword extends BaseEntity {
 
+    private static final int MIN_LENGTH = 2;
+    private static final int MAX_LENGTH = 10;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id", nullable = false)
     private Device device;
@@ -43,11 +46,9 @@ public class Keyword extends BaseEntity {
 
     public static Keyword of(Device device, String keyword) {
         String normalized = normalize(keyword);
-        if (normalized.isEmpty()) {
-            throw new IllegalArgumentException("키워드는 빈 값일 수 없습니다.");
-        }
-        if (normalized.length() > 50) {
-            throw new IllegalArgumentException("키워드는 50자 이하여야 합니다.");
+        if (normalized.length() < MIN_LENGTH || normalized.length() > MAX_LENGTH) {
+            throw new IllegalArgumentException(
+                    String.format("키워드는 %d자 이상 %d자 이하여야 합니다.", MIN_LENGTH, MAX_LENGTH));
         }
         return new Keyword(device, normalized);
     }

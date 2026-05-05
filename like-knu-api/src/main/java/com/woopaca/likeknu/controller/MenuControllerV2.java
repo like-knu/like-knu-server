@@ -10,6 +10,7 @@ import com.woopaca.likeknu.entity.Cafeteria;
 import com.woopaca.likeknu.repository.CafeteriaRepository;
 import com.woopaca.likeknu.service.MenuRatingService;
 import com.woopaca.likeknu.service.MenuService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -67,6 +68,10 @@ public class MenuControllerV2 {
             @PathVariable("menuId") String menuId,
             @RequestBody MenuRatingRequest request
     ) {
-        return ResponseDto.of(menuRatingService.updateRating(menuId, request.deviceId(), request.rating()));
+        try {
+            return ResponseDto.of(menuRatingService.updateRating(menuId, request.deviceId(), request.rating()));
+        } catch (DataIntegrityViolationException e) {
+            return ResponseDto.of(menuRatingService.updateRating(menuId, request.deviceId(), request.rating()));
+        }
     }
 }
