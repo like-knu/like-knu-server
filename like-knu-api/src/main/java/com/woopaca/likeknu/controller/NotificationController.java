@@ -3,6 +3,7 @@ package com.woopaca.likeknu.controller;
 import com.woopaca.likeknu.controller.dto.base.PageDto;
 import com.woopaca.likeknu.controller.dto.base.PageResponseDto;
 import com.woopaca.likeknu.controller.dto.base.ResponseDto;
+import com.woopaca.likeknu.controller.dto.notification.HasUnreadNotificationResponse;
 import com.woopaca.likeknu.controller.dto.notification.MarkAllAsReadRequest;
 import com.woopaca.likeknu.controller.dto.notification.NotificationListResponse;
 import com.woopaca.likeknu.service.NotificationService;
@@ -36,6 +37,12 @@ public class NotificationController {
         List<NotificationListResponse> notificationList =
                 notificationService.getNotificationList(deviceId, Period.ofDays(30), pageDto);
         return PageResponseDto.of(notificationList, pageDto);
+    }
+
+    @GetMapping("/unread")
+    public ResponseDto<HasUnreadNotificationResponse> hasUnread(@RequestParam("deviceId") String deviceId) {
+        boolean hasUnread = notificationService.hasUnread(deviceId);
+        return ResponseDto.of(HasUnreadNotificationResponse.of(hasUnread));
     }
 
     @PutMapping("/{notificationId}/read")

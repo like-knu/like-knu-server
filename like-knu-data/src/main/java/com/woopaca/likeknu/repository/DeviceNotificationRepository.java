@@ -28,6 +28,8 @@ public interface DeviceNotificationRepository extends JpaRepository<DeviceNotifi
 
     Optional<DeviceNotification> findByDeviceAndNotification(Device device, Notification notification);
 
+    boolean existsByDeviceAndReadFalse(Device device);
+
     @Modifying(clearAutomatically = true)
     @Query("""
             UPDATE DeviceNotification dn

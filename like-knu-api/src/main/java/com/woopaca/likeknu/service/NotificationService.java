@@ -68,6 +68,12 @@ public class NotificationService {
         deviceNotificationRepository.markAllAsReadByDevice(device);
     }
 
+    @Transactional(readOnly = true)
+    public boolean hasUnread(String deviceId) {
+        Device device = findDevice(deviceId);
+        return deviceNotificationRepository.existsByDeviceAndReadFalse(device);
+    }
+
     private Device findDevice(String deviceId) {
         return deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new BusinessException(String.format("Device not found! [%s]", deviceId)));
