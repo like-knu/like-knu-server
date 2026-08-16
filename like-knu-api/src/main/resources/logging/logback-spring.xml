@@ -15,6 +15,10 @@
         <appender name="SLACK-ERROR" class="com.woopaca.likeknu.logging.SlackErrorAppender">
             <webhookUrl>${SLACK_WEBHOOK}</webhookUrl>
             <excludePatterns>IOException: Broken pipe|Failed to fetch Naver real-time bus information.</excludePatterns>
+            <timeoutPatterns>TimeoutException|SocketTimeoutException|ConnectTimeoutException|ReadTimeoutHandler|timed out</timeoutPatterns>
+            <timeoutWindowMinutes>180</timeoutWindowMinutes>
+            <timeoutThreshold>15</timeoutThreshold>
+            <timeoutCooldownMinutes>60</timeoutCooldownMinutes>
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                 <level>ERROR</level>
             </filter>
