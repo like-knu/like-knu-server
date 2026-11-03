@@ -1,13 +1,15 @@
 package com.woopaca.likeknu.collector.menu.scheduler;
 
 import com.woopaca.likeknu.collector.menu.MenuCollector;
+import com.woopaca.likeknu.collector.menu.dto.Meal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @Service
 public class MenuSchedulingService {
 
@@ -21,9 +23,15 @@ public class MenuSchedulingService {
 
     @Scheduled(cron = "50 0/10 9-18 * * *")
     public void scheduleMenuProduce() {
-        menuCollectors.stream()
-                .map(MenuCollector::collectMenus)
-                .flatMap(Collection::stream)
-                .forEach(applicationEventPublisher::publishEvent);
+        menuCollectors.forEach(this::produceMenus);
+    }
+
+    private void produceMenus(MenuCollector menuCollector) {
+        try {
+            menuCollector.collectMenus()
+                    .forEach(applicationEventPublisher::publishEvent);
+        } catch (RuntimeException e) {
+            log.error("식단 수집 실패. collector = {}", menuCollector.getClass().getSimpleName(), e);
+        }
     }
 }
