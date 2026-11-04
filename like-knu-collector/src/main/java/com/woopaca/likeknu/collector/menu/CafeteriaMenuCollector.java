@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 public class CafeteriaMenuCollector implements MenuCollector {
 
     private final MenuProperties menuProperties;
-    private final RestClient restClient;
 
     @Override
     public List<Meal> collectMenus() {
